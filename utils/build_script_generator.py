@@ -6,10 +6,7 @@ import yaml
 
 
 def main() -> int:
-    if len(sys.argv) > 1:
-        file_name = sys.argv[1]
-    else:
-        file_name = ".github/workflows/main.yml"
+    file_name = sys.argv[1] if len(sys.argv) > 1 else ".github/workflows/main.yml"
     try:
         with open(file_name) as workflow_file:
             yaml_data = yaml.load(workflow_file, Loader=yaml.FullLoader)
@@ -37,8 +34,9 @@ def main() -> int:
 
                 # Use preserved item order in dicts with Py 3.7
                 dependencies = dict.fromkeys(
-                    [key.split("_")[0] for key in filtered_data.keys()]
+                    [key.split("_")[0] for key in filtered_data]
                 ).keys()
+
                 dependency_strings = [
                     f"    \"{key.lower()} {environment_data.get(f'{key}_VERSION', '')}"
                     f" {environment_data.get(f'{key}_HASH', '')}\""
